@@ -49,9 +49,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // -----------
-    // Test method
-    // -----------
+    // This is just a public method to allow testing the voice recognition fade animation
+    // without needed to talk
     public void startFade(View view) {
         myRecognizeFade.start();
     }
@@ -65,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Log.d("MAIN", "onCreate");
+
         handleRecordPermissions();
 
         initializeRecognitionAnimation();
@@ -104,9 +104,12 @@ public class MainActivity extends AppCompatActivity {
     private void handleRecordPermissions() {
         // Verify/ask for permissions
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
+
+        // If we already have permissions, initialize listener and start listengin
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
             initializeSpeechRecognizer();
             startSpeechListening();
+        // Otherwise ask user for permissions
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.RECORD_AUDIO},
