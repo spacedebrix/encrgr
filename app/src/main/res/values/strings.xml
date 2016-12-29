@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Encrgr</string>
+    <string-array name="encourages">
+        <item>Yeah $pronoun you should $modifier do that!</item>
+        <item>Yeah $pronoun you should $MODIFIER do that!</item>
+        <item>What are you waiting for?</item>
+        <item>What are you waiting for, $pronoun?</item>
+        <item>$Pronoun! What are you waiting for?</item>
+    </string-array>
+    <string-array name="pronoun">
+        <item>man</item>
+        <item>boy</item>
+        <item>bro</item>
+        <item>girl</item>
+        <item>dude</item>
+    </string-array>
+    <string-array name="modifier">
+        <item>totally</item>
+        <item>definitely</item>
+        <item>totes</item>
+        <item>really</item>
+        <item>absolutely</item>
+    </string-array>
 </resources>
