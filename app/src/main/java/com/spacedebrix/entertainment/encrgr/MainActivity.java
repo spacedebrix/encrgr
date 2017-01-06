@@ -2,25 +2,19 @@ package com.spacedebrix.entertainment.encrgr;
 
 import android.Manifest;
 import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import java.util.Map;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,17 +36,6 @@ public class MainActivity extends AppCompatActivity {
     // -----------------------
     // Public methods
     // -----------------------
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        if( null != mySpeechRecognizer ) {
-            mySpeechRecognizer.destroy();
-            mySpeechRecognizer = null;
-        }
-        finish();
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[],
@@ -79,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
             mySpeechRecognizer.stopListening();
         }
 
-        // Prepare and start Encourage activity
-        Intent intent = new Intent(this, Encourage.class);
+        // Prepare and start EncourageActivity activity
+        Intent intent = new Intent(this, EncourageActivity.class);
 
         // Get encouraging words
         intent.putExtra( ENCOURAGE_MESSAGE, getEncouragingWords() );
@@ -94,18 +77,36 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
-        Log.d("MAIN", "onCreate");
+        //Log.d("MAIN", "onCreate");
 
         myRandom = new Random();
 
         // TEMP DEBUG
         //runTests();
 
-        handleRecordPermissions();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        overridePendingTransition(0,0);
         initializeRecognitionAnimation();
+        handleRecordPermissions();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if( null != mySpeechRecognizer ) {
+            mySpeechRecognizer.destroy();
+            mySpeechRecognizer = null;
+        }
+        finish();
     }
 
 
@@ -196,18 +197,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeRecognitionAnimation() {
-        if( null == myRecognizeFade ) {
 
-            // Setup colors
-            final View mainView = findViewById(R.id.activity_main);
-            if( null != mainView ) {
+        // Get colors
+        final int fadeFromColor = ContextCompat.getColor(getApplicationContext(), R.color.mainBackground);
+        final int standardFadeToColor = ContextCompat.getColor(getApplicationContext(), R.color.standardRecognizeFadeTo);
+        final int transitionDuration = getResources().getInteger(R.integer.transitionDuration);
 
-                final int fadeFromColor = ContextCompat.getColor(getApplicationContext(), R.color.mainBackground);
-                final int standardFadeToColor = ContextCompat.getColor(getApplicationContext(), R.color.standardRecognizeFadeTo);
-                final int transitionDuration = getResources().getInteger(R.integer.transitionDuration);
+        // Make sure we can find our view
+        final View mainView = findViewById(R.id.activity_main);
+        if( null != mainView ) {
 
+            // Start with background correct color
+            mainView.setBackgroundColor(fadeFromColor);
+
+            // If we haven't already created this, create it
+            if( null == myRecognizeFade ) {
+
+                // Setup colors
                 myRecognizeFade = ValueAnimator.ofObject(new ArgbEvaluator(), fadeFromColor, standardFadeToColor);
-
                 myRecognizeFade.setDuration(transitionDuration);
                 myRecognizeFade.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
@@ -334,11 +341,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void runTests() {
-        fillTemplate( "Test with no variables" );
-        fillTemplate( "Test with $pronoun in middle" );
-        fillTemplate( "Test with $pronoun" );
-        fillTemplate( "Test with $pronoun!" );
-        fillTemplate( "$pronoun at beginning" );
-        fillTemplate( "$pronoun, at beginning with comma" );
+        String[] templates = getEncourageTemplates();
+
+        for (String s: templates) {
+            Log.d( "TEST", fillTemplate(s) );
+        }
+
     }
 }

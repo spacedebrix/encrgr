@@ -1,24 +1,113 @@
 <resources>
     <string name="app_name">Encrgr</string>
     <string-array name="encourages">
-        <item>Yeah $pronoun you should $modifier do that!</item>
-        <item>Yeah $pronoun you should $MODIFIER do that!</item>
+        <item>$Affirmative$punctuation</item>
+        <item>$Affirmative, $pronoun$punctuation</item>
+        <item>$Affirmative, $affirmative$punctuation</item>
+        <item>$Affirmative $pronoun you should $adverb do that$punctuation</item>
+        <item>$Affirmative $pronoun you should $adverb, $adverb do that$punctuation</item>
+        <item>$Affirmative $pronoun you should $adverb, $ADVERB do that$punctuation</item>
+        <item>$Affirmative $pronoun you should $ADVERB do that$punctuation</item>
+        <item>$Affirmative $pronoun you should $ADVERB, $ADVERB do that$punctuation</item>
         <item>What are you waiting for?</item>
         <item>What are you waiting for, $pronoun?</item>
-        <item>$Pronoun! What are you waiting for?</item>
+        <item>$Pronoun$punctuation what are you waiting for?</item>
+        <item>Of course$punctuation</item>
+        <item>I don\'t see any negative outcome.</item>
+        <item>I don\'t see any negative consequences.</item>
+        <item>Only good things could happen$punctuation</item>
+        <item>Only good things could happen, $pronoun$punctuation</item>
+        <item>Nothing bad could possibly come of that.</item>
+        <item>There are no downsides.</item>
+        <item>There are no possible downsides.</item>
+        <item>No reason not to$punctuation</item>
+        <item>$Adverb no reason not to$punctuation</item>
+        <item>$Adverb, $adverb no reason not to$punctuation</item>
+        <item>$Adverb no reason not to, $pronoun$punctuation</item>
+        <item>$Adverb, $adverb no reason not to, $pronoun$punctuation</item>
+        <item>Do it$punctuation</item>
+        <item>$Affirmative $pronoun, you should $adverb do that, $pronoun$punctuation</item>
+        <item>Get on with it then$punctuation</item>
+        <item>This is a $positive idea$punctuation</item>
+        <item>$Positive, $affirmative$punctuation</item>
+        <item>$POSITIVE, $affirmative$punctuation</item>
+        <item>$POSITIVE, $AFFIRMATIVE$punctuation</item>
+        <item>$Affirmative, $positive$punctuation</item>
+        <item>$AFFIRMATIVE, $positive$punctuation</item>
+        <item>$Affirmative, $POSITIVE$punctuation</item>
+        <item>$AFFIRMATIVE, $POSITIVE$punctuation</item>
+        <item>$Positive idea$punctuation</item>
+        <item>$POSITIVE idea$punctuation</item>
+        <item>$POSITIVE IDEA$punctuation</item>
+        <item>I predict a $positive outcome.</item>
+        <item>You know that\'s a $positive idea.</item>
+        <item>$Affirmative, that would be $cool$punctuation</item>
+        <item>Sounds $cool$punctuation</item>
+        <item>$Affirmative, sounds $cool$punctuation</item>
+        <item>Make it happen$punctuation</item>
+        <item>Make it happen, $pronoun$punctuation</item>
+    </string-array>
+    <string-array name="cool">
+        <item>cool</item>
+        <item>awesome</item>
+        <item>sweet</item>
+    </string-array>
+    <string-array name="positive">
+        <item>good</item>
+        <item>great</item>
+        <item>nice</item>
+        <item>perfect</item>
+        <item>sensational</item>
+    </string-array>
+    <string-array name="affirmative">
+        <item>yes</item>
+        <item>hell yes</item>
+        <item>yeah</item>
+        <item>hell yeah</item>
+        <item>yep</item>
+        <item>hell yep</item>
+        <item>yup</item>
+        <item>hell yup</item>
+        <item>sure</item>
+        <item>of course</item>
+        <item>unquestionably</item>
+        <item>without question</item>
+        <item>for the queen</item>
+    </string-array>
+    <string-array name="punctuation">
+        <item>!</item>
+        <item>!!</item>
+        <item>!!!</item>
+        <item>!!!!!!</item>
+        <item>.</item>
+        <item>...</item>
+        <item></item>
     </string-array>
     <string-array name="pronoun">
         <item>man</item>
+        <item>my man</item>
+        <item>m\'man</item>
+        <item>good sir</item>
         <item>boy</item>
+        <item>my boy</item>
         <item>bro</item>
         <item>girl</item>
+        <item>my girl</item>
         <item>dude</item>
+        <item>my dude</item>
+        <item>m\'dude</item>
+        <item>lady</item>
+        <item>my lady</item>
+        <item>madam</item>
+        <item>m\'lady</item>
     </string-array>
-    <string-array name="modifier">
+    <string-array name="adverb">
         <item>totally</item>
         <item>definitely</item>
         <item>totes</item>
         <item>really</item>
         <item>absolutely</item>
+        <item>unquestionably</item>
+        <item>for reals</item>
     </string-array>
 </resources>
