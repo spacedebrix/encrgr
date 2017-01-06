@@ -2,4 +2,7 @@
 <resources>
     <integer name="transitionDuration">3000</integer>
     <integer name="encourageFlashDuration">1000</integer>
+
+    <!-- Debug stuff -->
+    <bool name="finishMainOnEncourage">true</bool>
 </resources>

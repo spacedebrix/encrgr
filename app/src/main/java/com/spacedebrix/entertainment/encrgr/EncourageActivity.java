@@ -27,9 +27,13 @@ public class EncourageActivity extends AppCompatActivity {
     // Public methods
     // -----------------------
     public void goBack(View view) {
-        //Intent intent = new Intent(this, MainActivity.class);
 
-        //startActivity(intent);
+        // Main was destroyed, recreate it
+        if( getResources().getBoolean(R.bool.finishMainOnEncourage) ) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+
         finish();
     }
 
@@ -39,6 +43,7 @@ public class EncourageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_encourage);
 
         // Initialize UI bullshit
@@ -48,6 +53,13 @@ public class EncourageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.ENCOURAGE_MESSAGE);
         setEncourage( message );
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        goBack(null);
     }
 
     // -----------------------

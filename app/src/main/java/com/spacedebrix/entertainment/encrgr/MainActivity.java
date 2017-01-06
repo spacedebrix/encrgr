@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     Intent mySpeechRecognizerIntent = null;
     ValueAnimator myRecognizeFade = null;
     Random myRandom = null;
+    boolean myHasListeningPermissions = false;
 
     // -----------------------
     // Public methods
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         switch(requestCode) {
             case PERMISSION_RECORD_AUDIO:
                 if( grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED )
+                    myHasListeningPermissions = true;
                     initializeSpeechRecognizer();
                     startSpeechListening();
                     break;
@@ -69,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra( ENCOURAGE_MESSAGE, getEncouragingWords() );
 
         startActivity(intent);
+
+        // Finish this activity when we leave
+        if( getResources().getBoolean(R.bool.finishMainOnEncourage)) {
+            finish();
+        }
     }
 
     // -----------------------
@@ -87,15 +94,31 @@ public class MainActivity extends AppCompatActivity {
         // TEMP DEBUG
         //runTests();
 
+        handleRecordPermissions();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         overridePendingTransition(0,0);
         initializeRecognitionAnimation();
-        handleRecordPermissions();
+        startSpeechListening();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if( null != mySpeechRecognizer ) {
+            mySpeechRecognizer.stopListening();
+        }
     }
 
     @Override
@@ -235,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
         // If we already have permissions, initialize listener and start listening
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            myHasListeningPermissions = true;
             initializeSpeechRecognizer();
             startSpeechListening();
         // Otherwise ask user for permissions
@@ -266,18 +290,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startSpeechListening() {
-        if( null != mySpeechRecognizer ) {
-            mySpeechRecognizer.startListening(mySpeechRecognizerIntent);
-        }
-        else {
-            // For some reason this got destroyed, log and try again?
-            Log.d("START SPEECH LISTENING", "SpeechRecognizer object unexpected null, recreating.");
-            initializeSpeechRecognizer();
-            if( null != mySpeechRecognizer ) {
+        if( myHasListeningPermissions ) {
+            if (null != mySpeechRecognizer) {
+                mySpeechRecognizer.stopListening();
                 mySpeechRecognizer.startListening(mySpeechRecognizerIntent);
-            }
-            else {
-                Log.d("START SPEECH LISTENING", "SpeechRecognizer recreation failed...");
+            } else {
+                // For some reason this got destroyed, log and try again?
+                Log.d("START SPEECH LISTENING", "SpeechRecognizer object unexpectedly null, recreating.");
+                initializeSpeechRecognizer();
+                if (null != mySpeechRecognizer) {
+                    mySpeechRecognizer.startListening(mySpeechRecognizerIntent);
+                } else {
+                    Log.d("START SPEECH LISTENING", "SpeechRecognizer recreation failed...");
+                }
             }
         }
     }
