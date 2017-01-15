@@ -1,5 +1,25 @@
 <resources>
     <string name="app_name">Encrgr</string>
+    <string-array name="suggestions">
+        <item>Should I bake a cake?</item>
+        <item>Should I talk to that person over there?</item>
+        <item>Should I ask for a raise?</item>
+        <item>Should I go to the gym?</item>
+        <item>Should I go for a run?</item>
+        <item>Should I watch another episode?</item>
+        <item>Should I go to the bathroom?</item>
+        <item>Should I do laundry?</item>
+        <item>Should I buy this car?</item>
+        <item>Should I buy a boat?</item>
+        <item>Should I quit my job?</item>
+        <item>Should I eat a whole pizza?</item>
+        <item>Should I go to bed?</item>
+        <item>Should I eat a book?</item>
+        <item>Should I sell my house?</item>
+        <item>Should I take up karate?</item>
+    </string-array>
+
+
     <string-array name="encourages">
         <item>$Affirmative$punctuation</item>
         <item>$Affirmative, $pronoun$punctuation</item>

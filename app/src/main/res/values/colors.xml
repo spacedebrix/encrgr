@@ -6,4 +6,5 @@
     <color name="mainBackground">#004665</color>
     <color name="standardRecognizeFadeTo">#000000</color>
     <color name="encourageText">#ffffff</color>
+    <color name="suggestions">#ffffff</color>
 </resources>

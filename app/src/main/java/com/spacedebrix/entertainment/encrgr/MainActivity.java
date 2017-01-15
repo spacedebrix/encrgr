@@ -10,11 +10,22 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     ValueAnimator myRecognizeFade = null;
     Random myRandom = null;
     boolean myHasListeningPermissions = false;
+    List<TextView> myTextViews = null;
 
     // -----------------------
     // Public methods
@@ -103,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
         overridePendingTransition(0,0);
         initializeRecognitionAnimation();
+        startSuggestions();
         startSpeechListening();
     }
 
@@ -125,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         }
         finish();
     }
+
 
 
     // -----------------------
@@ -213,6 +227,10 @@ public class MainActivity extends AppCompatActivity {
         return getResources().getStringArray(R.array.encourages);
     }
 
+    private String[] getEncourageSuggestions() {
+        return getResources().getStringArray(R.array.suggestions);
+    }
+
     private void initializeRecognitionAnimation() {
 
         // Get colors
@@ -299,6 +317,52 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void startSuggestions() {
+
+        String[] suggestions = getEncourageSuggestions();
+        RelativeLayout thisLayout = (RelativeLayout)findViewById( R.id.activity_main );
+
+        TextView tv = getSuggestionTextView( suggestions[ myRandom.nextInt(suggestions.length) ] );
+        thisLayout.addView( tv );
+        setSuggestionAnimation(tv);
+    }
+
+    private TextView getSuggestionTextView( String suggestion ) {
+
+        TextView tv = new TextView( MainActivity.this );
+        tv.setText( suggestion );
+        tv.setTextSize( getResources().getInteger(R.integer.suggestionSize) );
+        tv.setTextColor( ContextCompat.getColor(getApplicationContext(), R.color.suggestions) );
+
+        return tv;
+
+    }
+
+    private void setSuggestionAnimation( TextView tv ) {
+
+        AnimationSet set = new AnimationSet(true);
+
+        TypedValue typedValue = new TypedValue();
+        getResources().getValue( R.dimen.suggestionMaxAlpha, typedValue, true );
+        float maxAlpha = typedValue.getFloat();
+
+        Animation animation = new AlphaAnimation(0.0f, maxAlpha);
+        animation.setDuration(getResources().getInteger(R.integer.suggestionFadeInDuration));
+        set.addAnimation(animation);
+
+        animation = new AlphaAnimation(maxAlpha, 0.0f);
+        animation.setDuration(getResources().getInteger(R.integer.suggestionFadeOutDuration));
+        animation.setStartOffset( getResources().getInteger(R.integer.suggestionFadeInDuration) +
+                                  getResources().getInteger(R.integer.suggestionStayDuration));
+        set.addAnimation(animation);
+
+        animation = new TranslateAnimation( 300, 0, 50, 50 );
+        animation.setDuration(getResources().getInteger(R.integer.suggestionFadeInDuration) * 5);
+        set.addAnimation(animation);
+
+        tv.startAnimation(set);
     }
 
 

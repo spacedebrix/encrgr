@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- animations -->
     <integer name="transitionDuration">3000</integer>
     <integer name="encourageFlashDuration">1000</integer>
+    <integer name="suggestionFadeInDuration">3000</integer>
+    <integer name="suggestionStayDuration">500</integer>
+    <integer name="suggestionFadeOutDuration">3000</integer>
+
+    <!-- misc -->
+    <integer name="suggestionSize">20</integer>
+    <item name="suggestionMaxAlpha" format="float" type="dimen">0.8</item>
 
     <!-- Debug stuff -->
     <bool name="finishMainOnEncourage">true</bool>
