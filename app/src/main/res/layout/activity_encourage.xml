@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView"
         android:layout_width="wrap_content"
-        android:textSize="30sp"
+        android:textSize="36sp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:textColor="@color/encourageText"

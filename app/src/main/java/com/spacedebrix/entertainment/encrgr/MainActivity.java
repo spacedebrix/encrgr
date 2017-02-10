@@ -5,6 +5,8 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
+import android.os.SystemClock;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -13,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     Random myRandom = null;
     boolean myHasListeningPermissions = false;
     List<TextView> myTextViews = null;
+    Thread mySuggestionThread = null;
 
     // -----------------------
     // Public methods
@@ -115,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
 
         overridePendingTransition(0,0);
         initializeRecognitionAnimation();
-        startSuggestions();
         startSpeechListening();
+        startSuggestions();
     }
 
     @Override
@@ -126,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         if( null != mySpeechRecognizer ) {
             mySpeechRecognizer.stopListening();
         }
+        stopSuggestions();
     }
 
     @Override
@@ -321,12 +326,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void startSuggestions() {
 
-        String[] suggestions = getEncourageSuggestions();
-        RelativeLayout thisLayout = (RelativeLayout)findViewById( R.id.activity_main );
+        final String[] suggestions = getEncourageSuggestions();
+        final RelativeLayout thisLayout = (RelativeLayout)findViewById( R.id.activity_main );
 
-        TextView tv = getSuggestionTextView( suggestions[ myRandom.nextInt(suggestions.length) ] );
-        thisLayout.addView( tv );
-        setSuggestionAnimation(tv);
+        mySuggestionThread = new Thread(){
+            public void run() {
+            while (true) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        TextView tv = getSuggestionTextView(suggestions[myRandom.nextInt(suggestions.length)]);
+                        thisLayout.addView(tv, 0);
+                        setSuggestionAnimation(tv);
+                    }
+                });
+                try {
+                    Thread.sleep(getResources().getInteger(R.integer.suggestionSpawnRate));
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        }};
+
+        mySuggestionThread.start();
+    }
+
+    private void stopSuggestions() {
+        if( null != mySuggestionThread ) {
+            mySuggestionThread.interrupt();
+        }
     }
 
     private TextView getSuggestionTextView( String suggestion ) {
@@ -335,12 +362,17 @@ public class MainActivity extends AppCompatActivity {
         tv.setText( suggestion );
         tv.setTextSize( getResources().getInteger(R.integer.suggestionSize) );
         tv.setTextColor( ContextCompat.getColor(getApplicationContext(), R.color.suggestions) );
+        tv.setShadowLayer(getResources().getInteger(R.integer.suggestionShadowRadius),
+                0,
+                0,
+                ContextCompat.getColor(getApplicationContext(), R.color.suggestions));
+        //tv.setSingleLine(true);
 
         return tv;
 
     }
 
-    private void setSuggestionAnimation( TextView tv ) {
+    private void setSuggestionAnimation( final TextView tv ) {
 
         AnimationSet set = new AnimationSet(true);
 
@@ -348,23 +380,79 @@ public class MainActivity extends AppCompatActivity {
         getResources().getValue( R.dimen.suggestionMaxAlpha, typedValue, true );
         float maxAlpha = typedValue.getFloat();
 
+        int fadeInDuration = getResources().getInteger(R.integer.suggestionFadeInDuration);
+        int fadeStayDuration = getResources().getInteger(R.integer.suggestionStayDuration);
+        int fadeOutDuration = getResources().getInteger(R.integer.suggestionFadeOutDuration);
+        int fadeTotalDuration = fadeInDuration + fadeStayDuration + fadeOutDuration;
+
         Animation animation = new AlphaAnimation(0.0f, maxAlpha);
-        animation.setDuration(getResources().getInteger(R.integer.suggestionFadeInDuration));
+        animation.setDuration(fadeInDuration);
         set.addAnimation(animation);
 
         animation = new AlphaAnimation(maxAlpha, 0.0f);
-        animation.setDuration(getResources().getInteger(R.integer.suggestionFadeOutDuration));
-        animation.setStartOffset( getResources().getInteger(R.integer.suggestionFadeInDuration) +
-                                  getResources().getInteger(R.integer.suggestionStayDuration));
+        animation.setDuration(fadeOutDuration);
+        animation.setStartOffset( fadeInDuration + fadeStayDuration);
         set.addAnimation(animation);
 
-        animation = new TranslateAnimation( 300, 0, 50, 50 );
-        animation.setDuration(getResources().getInteger(R.integer.suggestionFadeInDuration) * 5);
+        Point startPoint = new Point();
+        Point endPoint = new Point();
+        setAnimationTranslatePoints(startPoint, endPoint);
+
+        final RelativeLayout thisLayout = (RelativeLayout)findViewById( R.id.activity_main );
+        animation = new TranslateAnimation( startPoint.x, endPoint.x, startPoint.y, endPoint.y );
+        animation.setDuration(fadeTotalDuration);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) { }
+            @Override
+            public void onAnimationRepeat(Animation animation) { }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                // without the post method, the main UI crashes if the view is removed
+                thisLayout.post(new Runnable() {
+                    public void run() {
+                        // it works without the runOnUiThread, but all UI updates must
+                        // be done on the UI thread
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                thisLayout.removeView(tv);
+                            }
+                        });
+                    }
+                });
+            }
+        });
         set.addAnimation(animation);
 
         tv.startAnimation(set);
     }
 
+    private void setAnimationTranslatePoints(Point startPoint, Point endPoint) {
+
+        TypedValue typedValue = new TypedValue();
+        getResources().getValue( R.dimen.suggestionStartBufferX, typedValue, true );
+        float startBufferX = typedValue.getFloat();
+
+        getResources().getValue( R.dimen.suggestionStartOffsetX, typedValue, true );
+        float startOffsetX = typedValue.getFloat();
+
+        getResources().getValue( R.dimen.suggestionStartBufferY, typedValue, true );
+        float startBufferY = typedValue.getFloat();
+
+        getResources().getValue( R.dimen.suggestionStartOffsetY, typedValue, true );
+        float startOffsetY = typedValue.getFloat();
+
+        Point screenSize = new Point();
+        getWindowManager().getDefaultDisplay().getSize(screenSize);
+
+        startPoint.x = (int)( (startOffsetX * screenSize.x) + (startBufferX * myRandom.nextInt(screenSize.x)));
+        startPoint.y = (int)( (startOffsetY * screenSize.y) + (startBufferY * myRandom.nextInt(screenSize.y)));
+
+        endPoint.x = startPoint.x  - getResources().getInteger(R.integer.suggestionTravelX);
+        endPoint.y = startPoint.y;
+
+        Log.d("SPAWN SUGGESTION", "Start = " + startPoint.x + ", " + startPoint.y + " End = " + endPoint.x + ", " + endPoint.y );
+    }
 
     // -----------------------
     // Inner classes

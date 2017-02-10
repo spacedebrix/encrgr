@@ -25,10 +25,10 @@
         <item>$Affirmative, $pronoun$punctuation</item>
         <item>$Affirmative, $affirmative$punctuation</item>
         <item>$Affirmative $pronoun you should $adverb do that$punctuation</item>
-        <item>$Affirmative $pronoun you should $adverb, $adverb do that$punctuation</item>
-        <item>$Affirmative $pronoun you should $adverb, $ADVERB do that$punctuation</item>
+        <item>$Affirmative $pronoun you should $adverb $adverb do that$punctuation</item>
+        <item>$Affirmative $pronoun you should $adverb $ADVERB do that$punctuation</item>
         <item>$Affirmative $pronoun you should $ADVERB do that$punctuation</item>
-        <item>$Affirmative $pronoun you should $ADVERB, $ADVERB do that$punctuation</item>
+        <item>$Affirmative $pronoun you should $ADVERB $ADVERB do that$punctuation</item>
         <item>What are you waiting for?</item>
         <item>What are you waiting for, $pronoun?</item>
         <item>$Pronoun$punctuation what are you waiting for?</item>
