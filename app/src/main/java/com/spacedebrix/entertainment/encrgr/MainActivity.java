@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -366,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
                 0,
                 0,
                 ContextCompat.getColor(getApplicationContext(), R.color.suggestions));
-        //tv.setSingleLine(true);
+        tv.setGravity(Gravity.CENTER);
 
         return tv;
 

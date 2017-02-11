@@ -17,6 +17,63 @@
         <item>Should I eat a book?</item>
         <item>Should I sell my house?</item>
         <item>Should I take up karate?</item>
+        <item>Should I do the thing?</item>
+        <item>Should I talk to that girl over there?</item>
+        <item>Should I talk to that girl?</item>
+        <item>Should I talk to that guy?</item>
+        <item>Should I talk to that guy over there?</item>
+        <item>Should I ask her out?</item>
+        <item>Should I ask him out?</item>
+        <item>Should I buy stocks?</item>
+        <item>Should I save more money?</item>
+        <item>Should I eat out today?</item>
+        <item>Should I stay in today?</item>
+        <item>Should I have another?</item>
+        <item>Should I upgrade my computer?</item>
+        <item>Should I buy a new laptop?</item>
+        <item>Should I write a book?</item>
+        <item>Should I write a screenplay?</item>
+        <item>Should I write a screenplay?</item>
+        <item>Should I turn it up?</item>
+        <item>Should I walk to work today?</item>
+        <item>Should I brew my own beer?</item>
+        <item>Should I see how long I can hold my breath?</item>
+        <item>Should I learn to speak spanish?</item>
+        <item>Should I learn to speak french?</item>
+        <item>Should I learn to speak english?</item>
+        <item>Should I learn to speak japanese?</item>
+        <item>Should I learn to speak chinese?</item>
+        <item>Should I learn to speak korean?</item>
+        <item>Should I learn to speak vietnamese?</item>
+        <item>Should I learn to speak russian?</item>
+        <item>Should I learn to speak greek?</item>
+        <item>Should I learn to program?</item>
+        <item>Should I adopt a dog?</item>
+        <item>Should I adopt a cat?</item>
+        <item>Should I adopt a snake?</item>
+        <item>Should I adopt a mouse?</item>
+        <item>Should I adopt a toaster?</item>
+        <item>Should I start a podcast?</item>
+        <item>Should I do some situps?</item>
+        <item>Should I do some pullups?</item>
+        <item>Should I do some pushups?</item>
+        <item>Should I do some squats?</item>
+        <item>Should I do some deadlifts?</item>
+        <item>Should I walk the line?</item>
+        <item>Should I walk to Toronto?</item>
+        <item>Should I windsurf to Japan?</item>
+        <item>Should I walk across the street?</item>
+        <item>Should I explore the city?</item>
+        <item>Should I order something new?</item>
+        <item>Should I go to college?</item>
+        <item>Should I do a back flip?</item>
+        <item>Should I do a front flip?</item>
+        <item>Should I do a cartwheel?</item>
+        <item>Should I run for president?</item>
+        <item>Should I run for mayor?</item>
+        <item>Should I run for governor?</item>
+        <item>Should I run for congress?</item>
+        <item>Should I buy everything in the vending machine?</item>
     </string-array>
 
 
@@ -28,7 +85,6 @@
         <item>$Affirmative $pronoun you should $adverb $adverb do that$punctuation</item>
         <item>$Affirmative $pronoun you should $adverb $ADVERB do that$punctuation</item>
         <item>$Affirmative $pronoun you should $ADVERB do that$punctuation</item>
-        <item>$Affirmative $pronoun you should $ADVERB $ADVERB do that$punctuation</item>
         <item>What are you waiting for?</item>
         <item>What are you waiting for, $pronoun?</item>
         <item>$Pronoun$punctuation what are you waiting for?</item>
