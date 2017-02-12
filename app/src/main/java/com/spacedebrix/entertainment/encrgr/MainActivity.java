@@ -4,14 +4,17 @@ import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +22,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -26,6 +30,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -95,6 +100,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void startSettings(View v) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+
+        // Finish this activity when we leave
+        if( getResources().getBoolean(R.bool.finishMainOnEncourage)) {
+            finish();
+        }
+    }
+
     // -----------------------
     // Protected Methods
     // -----------------------
@@ -103,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         //Log.d("MAIN", "onCreate");
 
@@ -271,6 +288,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleRecordPermissions() {
+
+        // Check if they want voice at all
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        if( !sharedPref.getBoolean("pref_voice_trigger", false) ) {
+            // Nope, return
+            Log.d("VOICE", "No voice");
+            return;
+        }
+
         // Verify/ask for permissions
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
 
